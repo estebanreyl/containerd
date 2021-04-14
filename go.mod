@@ -86,7 +86,7 @@ replace (
 	github.com/containerd/containerd/api => ./api
 	github.com/gogo/googleapis => github.com/gogo/googleapis v1.3.2
 	github.com/golang/protobuf => github.com/golang/protobuf v1.3.5
-	github.com/opencontainers/artifacts => github.com/aviral26/artifacts v0.0.0-20210331072334-fac4f3a4da4e
+	github.com/opencontainers/artifacts => github.com/notaryproject/artifacts v0.0.0-20210414030140-c7c701eff45d
 	// urfave/cli must be <= v1.22.1 due to a regression: https://github.com/urfave/cli/issues/1092
 	github.com/urfave/cli => github.com/urfave/cli v1.22.1
 	google.golang.org/genproto => google.golang.org/genproto v0.0.0-20200224152610-e50cd9704f63
