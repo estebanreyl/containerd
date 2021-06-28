@@ -49,14 +49,14 @@ func (r dockerDiscoverer) Discover(ctx context.Context, desc ocispec.Descriptor,
 	}
 
 	v := url.Values{}
-	v.Set("artifact-type", artifactType)
+	v.Set("referenceType", artifactType)
 	query := "?" + v.Encode()
 
 	var firstErr error
 	for _, originalHost := range r.hosts {
 		host := originalHost
-		host.Path += "/_ext/oci-artifacts/v1"
-		req := r.request(host, http.MethodGet, "manifests", desc.Digest.String(), "references")
+		host.Path += "/_ext/oci-artifacts/v1-rc1"
+		req := r.request(host, http.MethodGet, "manifests", desc.Digest.String(), "referrers")
 		req.path += query
 		if err := req.addNamespace(r.refspec.Hostname()); err != nil {
 			return nil, err

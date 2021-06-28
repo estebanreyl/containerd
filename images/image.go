@@ -370,22 +370,16 @@ func Children(ctx context.Context, provider content.Provider, desc ocispec.Descr
 			return nil, err
 		}
 
-		appendDesc := func(artifacts ...artifactspec.Descriptor) {
-			for _, desc := range artifacts {
-				descs = append(descs, v1.Descriptor{
-					MediaType:   desc.MediaType,
-					Digest:      desc.Digest,
-					Size:        desc.Size,
-					URLs:        desc.URLs,
-					Annotations: desc.Annotations,
-					Platform:    (*v1.Platform)(desc.Platform),
-				})
-			}
+		for _, desc := range artifact.Blobs {
+			descs = append(descs, v1.Descriptor{
+				MediaType:   desc.MediaType,
+				Digest:      desc.Digest,
+				Size:        desc.Size,
+				URLs:        desc.URLs,
+				Annotations: desc.Annotations,
+				Platform:    (*v1.Platform)(desc.Platform),
+			})
 		}
-		if artifact.Config != nil {
-			appendDesc(*artifact.Config)
-		}
-		appendDesc(artifact.Blobs...)
 	default:
 		if IsLayerType(desc.MediaType) || IsKnownConfig(desc.MediaType) {
 			// childless data types.
