@@ -26,10 +26,10 @@ import (
 	"github.com/containerd/containerd/errdefs"
 	"github.com/containerd/containerd/log"
 	"github.com/containerd/containerd/platforms"
-	artifactspec "github.com/opencontainers/artifacts/specs-go/v2"
 	digest "github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	v1 "github.com/opencontainers/image-spec/specs-go/v1"
+	artifactspec "github.com/oras-project/artifacts-spec/specs-go/v1"
 	"github.com/pkg/errors"
 )
 
@@ -365,7 +365,7 @@ func Children(ctx context.Context, provider content.Provider, desc ocispec.Descr
 			return nil, err
 		}
 
-		var artifact artifactspec.Artifact
+		var artifact artifactspec.Manifest
 		if err := json.Unmarshal(p, &artifact); err != nil {
 			return nil, err
 		}
@@ -378,13 +378,10 @@ func Children(ctx context.Context, provider content.Provider, desc ocispec.Descr
 					Size:        desc.Size,
 					URLs:        desc.URLs,
 					Annotations: desc.Annotations,
-					Platform:    (*v1.Platform)(desc.Platform),
 				})
 			}
 		}
-		if artifact.Config != nil {
-			appendDesc(*artifact.Config)
-		}
+
 		appendDesc(artifact.Blobs...)
 	default:
 		if IsLayerType(desc.MediaType) || IsKnownConfig(desc.MediaType) {

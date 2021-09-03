@@ -21,9 +21,8 @@ import (
 	"io"
 
 	"github.com/containerd/containerd/content"
-	artifactspec "github.com/opencontainers/artifacts/specs-go/v2"
-	"github.com/opencontainers/go-digest"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
+	artifactspec "github.com/oras-project/artifacts-spec/specs-go/v1"
 )
 
 // Resolver provides remotes based on a locator.
@@ -72,13 +71,7 @@ type Pusher interface {
 type Discoverer interface {
 	// Discover returns a list of artifacts of the specified type, referencing
 	// the specified reference.
-	Discover(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]DiscoveredArtifact, error)
-}
-
-// DiscoveredArtifact is returned by the Discoverer contains the artifact and the digest of the artifact
-type DiscoveredArtifact struct {
-	Digest   digest.Digest
-	Artifact artifactspec.Artifact
+	Discover(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]artifactspec.Descriptor, error)
 }
 
 // FetcherFunc allows package users to implement a Fetcher with just a
@@ -101,9 +94,9 @@ func (fn PusherFunc) Push(ctx context.Context, desc ocispec.Descriptor) (content
 
 // DiscovererFunc allows package users to implement a Discoverer with just a
 // function.
-type DiscovererFunc func(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]DiscoveredArtifact, error)
+type DiscovererFunc func(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]artifactspec.Descriptor, error)
 
 // Discover content
-func (fn DiscovererFunc) Discover(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]DiscoveredArtifact, error) {
+func (fn DiscovererFunc) Discover(ctx context.Context, desc ocispec.Descriptor, artifactType string) ([]artifactspec.Descriptor, error) {
 	return fn(ctx, desc, artifactType)
 }
